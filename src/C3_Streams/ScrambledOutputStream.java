@@ -9,7 +9,12 @@ import java.io.OutputStream;
  */
 public class ScrambledOutputStream extends FilterOutputStream {
 
+    public static final int MAP_LENGTH = 256;
+
+
     private int [] map;
+
+
 
     /**
      * Creates an output stream filter built on top of the specified
@@ -24,8 +29,8 @@ public class ScrambledOutputStream extends FilterOutputStream {
         super(out);
         if(map == null)
             throw new NullPointerException("map is null");
-        if(map.length != 256)
-            throw new IllegalArgumentException("map length != 256");
+        if(map.length != MAP_LENGTH)
+            throw new IllegalArgumentException("map length != " + MAP_LENGTH);
         this.map = map;
     }
 

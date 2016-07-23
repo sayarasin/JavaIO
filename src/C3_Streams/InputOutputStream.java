@@ -1,8 +1,7 @@
 package C3_Streams;
 
-import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
+import java.io.*;
+import java.util.Random;
 
 /**
  * Created by sayarasin on 07/23/2016.
@@ -62,6 +61,62 @@ public class InputOutputStream {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+    }
+
+
+    private int [] MakeMap() {
+        int [] map = new int [ScrambledOutputStream.MAP_LENGTH];
+
+        // initialize map to ordered number
+        for(int i = 0 ; i < map.length ; ++i)
+            map[i] = i;
+
+        // Shuffle map
+        Random r = new Random();
+        for(int i = 0 ; i < map.length ; ++i) {
+            int n = r.nextInt(map.length);
+            int t = map[i];
+            map[i]= map[n];
+            map[n]= t;
+        }
+
+        return map;
+    }
+
+
+    public void FilterStream(String inputFile, String outputFile) {
+
+        FileInputStream fis = null;
+        ScrambledOutputStream sos = null;
+
+        try {
+            fis = new FileInputStream(inputFile);
+            FileOutputStream fos = new FileOutputStream(outputFile);
+            sos = new ScrambledOutputStream(fos, MakeMap());
+
+            int b;
+            while((b = fis.read()) != -1)
+                sos.write(b);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(sos != null) {
+                try {
+                    sos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
     }
